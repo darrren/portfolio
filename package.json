@@ -6,7 +6,7 @@
     "export": "next build src && next export src",
     "start": "NODE_ENV=production node server.js",
     "start111": "next start -p $PORT",
-    "heroku-postbuild": "npm run build src"
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "@zeit/next-sass": "0.0.9",
