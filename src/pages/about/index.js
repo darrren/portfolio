@@ -1,11 +1,13 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { TweenMax, Power4 } from 'gsap'
+import { withI18next } from '../../lib/withI18next'
 import { AboutContainer } from './style.js'
 
 class About extends React.Component {
   static propTypes = {
+    t: PropTypes.any
   }
 
   static async getInitialProps (props) {
@@ -56,12 +58,14 @@ class About extends React.Component {
   }
 
   render () {
+    const { t } = this.props
+
     return (
       <AboutContainer>
         <div className='container'>
           <div className='row pb-5'>
             <div className='col-12 col-md-12'>
-              <h2 className='pt-3 pt-sm-5 title font-nixieone'><strong>About Me</strong></h2>
+              <h2 className='pt-3 pt-sm-5 title font-nixieone'><strong>{t('title')}</strong></h2>
               <p className='intro'>
                 My name is Darren Chan, a Front-End Developer, has worked for over 7 years in web development. I’m an open-mind fast learner. I could pick up a latest technology in a short time. I am a proficient in Frontend technologies with compatible cross browsers and different platforms. I has better to resolving problem for various projects with my web knowledge.
                 <br /><br />
@@ -178,4 +182,4 @@ class About extends React.Component {
   }
 }
 
-export default connect()(About)
+export default connect()(withI18next(['about', 'common'])(About))

@@ -29,8 +29,8 @@ class Home extends React.Component {
         <Fireflies />
         <div className='intro'>
           <h1 className='font-raleway'><span>{t('welcome')}</span></h1>
-          <h2 className='font-ralewayBold'><span>My name is D<small>arren</small> C<small>han</small></span></h2>
-          <h3 className='font-ralewayBold'><span>A Front-End Web Developer</span></h3>
+          {/* <h2 className='font-ralewayBold'><span>My name is D<small>arren</small> C<small>han</small></span></h2>
+          <h3 className='font-ralewayBold'><span>A Front-End Web Developer</span></h3> */}
         </div>
       </HomeContainer>
     )

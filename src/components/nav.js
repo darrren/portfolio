@@ -24,21 +24,24 @@ class Nav extends React.Component {
       <Navigation>
         <div className='menuContainer font-muli px-2 px-md-4'>
           <div className='menuContent'>
-            <Link prefetch href='/'>
-              <a><span><img src={icoHome} />HOME</span></a>
-            </Link>
-            {' / '}
-            <Link prefetch route={i18n.language + '/about'}>
-              <a><span><img src={icoAbout} />ABOUT</span></a>
-            </Link>
-            {' / '}
-            <Link prefetch route='blog' params={{ slug: 'hello-world' }}>
-              <a><span><img src={icoWork} />WORKS</span></a>
-            </Link>
-            {' / '}
-            <Link prefetch route='counter'>
-              <a><span><img src={icoContact} />CONTACT</span></a>
-            </Link>
+            {i18n.language
+              ? <div>
+                <Link prefetch href='/'>
+                  <a><span><img src={icoHome} />HOME</span></a>
+                </Link>
+                {' / '}
+                <Link prefetch route='about' params={{ lng: i18n.language }}>
+                  <a><span><img src={icoAbout} />ABOUT</span></a>
+                </Link>
+                {' / '}
+                <Link prefetch route='blog' params={{ slug: 'hello-world' }}>
+                  <a><span><img src={icoWork} />WORKS</span></a>
+                </Link>
+                {' / '}
+                <Link prefetch route='counter'>
+                  <a><span><img src={icoContact} />CONTACT</span></a>
+                </Link>
+              </div> : ''}
           </div>
           <div className='copyright'>© Copyright 2017 Darren Chan. All Rights Reserved.</div>
         </div>
