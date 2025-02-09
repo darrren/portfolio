@@ -8,7 +8,7 @@ import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import * as THREE from "three";
 import gsap from "gsap";
-import DraggableRigidBody, { DraggableRigidBodyProps } from "./DraggableRigidBody";
+import DraggableRigidBody, { DraggableRigidBodyProps } from "@/Components/DraggableRigidBody";
 
 export function Model(props: any) {
   const ref = useRef<any>();

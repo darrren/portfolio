@@ -1,15 +1,35 @@
 {
-  "include": [
+    "include": [
       "./src/**/*"
-  ],
-  "compilerOptions": {
-      "strict": true,
-      "resolveJsonModule": true,
-      "esModuleInterop": true,
+    ],
+    "exclude": [
+      "node_modules"
+    ],
+    "compilerOptions": {
       "lib": [
-          "dom",
-          "es2015"
+        "dom",
+        "es6"
       ],
-      "jsx": "react-jsx"
-  }
+      "allowJs": true,
+      "skipLibCheck": true,
+      "strict": true,
+      "forceConsistentCasingInFileNames": true,
+      "noEmit": true,
+      "esModuleInterop": true,
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "jsx": "preserve",
+      "incremental": true,
+      "baseUrl": "./src",
+      "paths": {
+        "@/*": [
+          "./*"
+        ]
+      },
+      "noImplicitAny": true,
+      "noImplicitThis": true,
+      "strictNullChecks": true,
+      "allowSyntheticDefaultImports": true
+    }
 }
