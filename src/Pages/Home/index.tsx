@@ -7,7 +7,10 @@ import { useControls } from "leva";
 import * as THREE from "three";
 import { Physics, RigidBody } from "@react-three/rapier";
 
-import { Model } from "./balloon";
+// COMPONENTS
+import Layout from "@/Components/Layout"
+import { Model } from "@/Components/balloon"
+
 import "./styles.scss";
 
 function Striplight(props: any) {
@@ -126,7 +129,7 @@ const Scene = memo(() => {
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial />
       </mesh> */}
-      <Html
+      {/* <Html
         wrapperClass="leading"
         position={[0, -0.9, 0]}
         distanceFactor={10}
@@ -135,16 +138,17 @@ const Scene = memo(() => {
         // occlude="blending"
       >
         <p>I'm a Front-End Developer</p>
-      </Html>
+      </Html> */}
     </>
   );
 });
 
-export default function App() {
+export default function Home() {
   const orbitControlsRef: any = useRef();
 
   return (
-    <>
+    <Layout>
+      <div className="fixed top-0 left-0 w-full h-full">
       <Canvas
         shadows
         flat
@@ -205,6 +209,11 @@ export default function App() {
         </Environment>
         {/* <OrbitControls ref={orbitControlsRef} /> */}
       </Canvas>
-    </>
-  );
+      </div>
+      <div className="relative flex justify-center items-center min-h-[100svh]">
+        <p className="leading text-base text-white mt-52 md:mt-72">I'm a Front-End Developer</p>
+      </div>
+      <div className="min-h-[100svh]"></div>
+    </Layout>
+  )
 }

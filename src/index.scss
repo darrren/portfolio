@@ -1,0 +1,16 @@
+@import 'tailwind';
+
+* {
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+html,
+body,
+#root {
+  background-color: #141414;
+  width: 100%;
+}
