@@ -148,7 +148,7 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className="fixed top-0 left-0 w-full h-full">
+      <div className="canvas">
       <Canvas
         shadows
         flat
@@ -166,7 +166,9 @@ export default function Home() {
       >
         <color attach="background" args={["#555"]} />
         <Stats />
-        <Scene />
+        <Suspense fallback={<></>}>
+          <Scene />
+        </Suspense>
         <ambientLight intensity={1} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
         <EffectComposer>
@@ -210,7 +212,7 @@ export default function Home() {
         {/* <OrbitControls ref={orbitControlsRef} /> */}
       </Canvas>
       </div>
-      <div className="relative flex justify-center items-center min-h-[100svh]">
+      <div className="relative flex justify-center items-center min-h-[100svh] pointer-events-none">
         <p className="leading text-base text-white mt-52 md:mt-72">I'm a Front-End Developer</p>
       </div>
       <div className="min-h-[100svh]"></div>

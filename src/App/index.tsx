@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useEffect, Suspense, lazy } from "react"
+import { useState, useLayoutEffect, useEffect, lazy, Suspense } from "react"
 import { Routes, Route, useLocation, useParams, useNavigate, Navigate } from "react-router-dom"
 import { AnimatePresence, LazyMotion, domAnimation, MotionConfig } from "motion/react"
 import { useHookstate as UseHookstate } from '@hookstate/core'
@@ -51,14 +51,14 @@ export default function App() {
   return (
     <div className="App">
       <Suspense fallback={<></>}>
-        <LazyMotion features={domAnimation}>
-          <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
-              <Route path={`/`} element={<Home />} />
-              <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-          </AnimatePresence>
-        </LazyMotion>
+      <LazyMotion features={domAnimation}>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path={`/`} element={<Home />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </AnimatePresence>
+      </LazyMotion>
       </Suspense>
     </div>
   );
