@@ -7,11 +7,11 @@ const Works = memo(function Works() {
   return (
     <Layout>
       <section className="works page">
-        <CurveSlider />
         <div className="works-heading pointer-events-none">
-          <p className="works-kicker">Portfolio</p>
-          <h1 className="works-title">Selected Works</h1>
+          <p className="works-kicker tracking-[1rem]">Portfolio</p>
+          <h1 className="works-title tracking-widest">Selected Works</h1>
         </div>
+        <CurveSlider />
       </section>
     </Layout>
   )

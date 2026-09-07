@@ -71,6 +71,38 @@ export default function CurveSlider() {
     return () => window.removeEventListener("wheel", onWheel)
   }, [])
 
+  useEffect(() => {
+    let lastY = 0
+    let tracking = false
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (openRef.current) return
+      lastY = e.touches[0].clientY
+      tracking = true
+    }
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (!tracking || openRef.current) return
+      const y = e.touches[0].clientY
+      const delta = lastY - y
+      scrollTarget.current += delta
+      lastY = y
+    }
+
+    const onTouchEnd = () => {
+      tracking = false
+    }
+
+    window.addEventListener("touchstart", onTouchStart, { passive: true })
+    window.addEventListener("touchmove", onTouchMove, { passive: true })
+    window.addEventListener("touchend", onTouchEnd, { passive: true })
+    return () => {
+      window.removeEventListener("touchstart", onTouchStart)
+      window.removeEventListener("touchmove", onTouchMove)
+      window.removeEventListener("touchend", onTouchEnd)
+    }
+  }, [])
+
   const handleSelect = useCallback((index: number) => {
     setSelectedIndex((prev) => (prev === index ? null : index))
   }, [])
@@ -106,7 +138,7 @@ export default function CurveSlider() {
             className={`works-slide ${i % 2 ? "vertical" : "horizontal"}`}
             data-width={item.size.width}
             data-height={item.size.height}
-            style={{ width: item.width }}
+            // style={{ width: item.width }}
           >
             <div className="works-image">
               <img src={item.image} alt={item.title} />
@@ -119,8 +151,8 @@ export default function CurveSlider() {
         className="works-canvas"
         dpr={[1, 2]}
         camera={{ fov: 45, near: 0.001, far: 1000, position: [0, 0, 5] }}
-        gl={{ antialias: false }}
-        onCreated={({ gl }) => gl.setClearColor(0x000000, 1)}
+        gl={{ antialias: false, alpha: true }}
+        // onCreated={({ gl }) => gl.setClearColor(0x000000, 1)}
       >
         {domEls.length > 0 && (
           <Suspense fallback={null}>

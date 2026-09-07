@@ -31,7 +31,7 @@ const getScreen = () => ({
 
 function CurveImage({ image, domEl, size, scroll, index, selected, onSelect }: Props) {
   const mesh = useRef<THREE.Mesh>(null!)
-  const hitMesh = useRef<THREE.Mesh>(null!)
+  // const hitMesh = useRef<THREE.Mesh>(null!)
   const geometry = useRef<THREE.PlaneGeometry>(null!)
   const material = useRef<THREE.ShaderMaterial>(null!)
   const texture = useTexture(image)
@@ -116,12 +116,12 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect }: P
       geom.computeVertexNormals()
       geom.computeBoundingSphere()
       geom.computeBoundingBox()
-      if (hitMesh.current) {
-        if (hitMesh.current.geometry !== geom) hitMesh.current.geometry = geom
-        hitMesh.current.position.copy(mesh.current.position)
-        hitMesh.current.scale.copy(mesh.current.scale).multiplyScalar(1.08)
-        hitMesh.current.rotation.copy(mesh.current.rotation)
-      }
+      // if (hitMesh.current) {
+      //   if (hitMesh.current.geometry !== geom) hitMesh.current.geometry = geom
+      //   hitMesh.current.position.copy(mesh.current.position)
+      //   hitMesh.current.scale.copy(mesh.current.scale).multiplyScalar(1.08)
+      //   hitMesh.current.rotation.copy(mesh.current.rotation)
+      // }
     }
 
     planeRects[index] = {
@@ -157,7 +157,7 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect }: P
           fragmentShader={fragmentShader}
         />
       </mesh>
-      <mesh
+      {/* <mesh
         ref={hitMesh}
         visible={false}
         onClick={(e) => {
@@ -170,7 +170,7 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect }: P
       >
         <planeGeometry args={[1, 1, 10, 10]} />
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
-      </mesh>
+      </mesh> */}
     </>
   )
 }

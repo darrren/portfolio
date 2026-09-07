@@ -1,65 +1,38 @@
 .works {
   &.page {
-    position: relative;
-    height: 100svh;
-    width: 100%;
-    overflow: hidden;
+    @apply relative w-full h-[100svh] overflow-hidden;
   }
 
   /* DOM slides act as invisible layout reference for the 3D projection */
   &-slides {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -16%);
-    pointer-events: none;
-    visibility: hidden;
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[16%] pointer-events-none invisible w-full flex flex-wrap justify-center items-center gap-8;
   }
 
   &-slide {
+    @apply w-10/12 md:w-[25vw];
     .works-image {
-      position: relative;
-      width: 100%;
+      @apply relative w-full;
     }
 
     &.horizontal .works-image {
-      padding-top: 60%;
+      @apply pt-[60%];
     }
 
     &.vertical .works-image {
-      padding-top: 160%;
+      @apply pt-[160%];
     }
 
     img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
+      @apply absolute top-0 left-0 w-full;
     }
   }
 
   &-canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    @apply absolute inset-0 w-full h-full;
   }
 
   &-popup-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block;
-    pointer-events: none;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+    @apply absolute top-0 left-0 block pointer-events-none object-cover;
     will-change: transform, width, height;
     animation: works-popup-in 0.25s 0.2s ease both;
   }
@@ -82,17 +55,8 @@
   }
 
   &-detail {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 3.5rem;
-    margin: 0 auto;
-    width: 90%;
-    max-width: 640px;
-    text-align: center;
-    color: #fff;
-    z-index: 70;
-    pointer-events: none;
+    @apply absolute left-0 bottom-0 mx-auto px-4 py-8 md:py-14 md:pt-24 w-full text-center text-white z-[70] pointer-events-none;
+    background-image: linear-gradient(#ffffff00, #ac63f6);
   }
 
   &-detail-kicker {
@@ -166,18 +130,11 @@
   }
 
   &-heading {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: #111;
-    z-index: 2;
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-white w-full;
   }
 
   &-kicker {
     font-size: 12px;
-    letter-spacing: 0.4em;
     text-transform: uppercase;
     opacity: 0.6;
     margin-bottom: 0.5rem;
@@ -186,6 +143,5 @@
   &-title {
     font-size: clamp(32px, 6vw, 72px);
     font-weight: 500;
-    letter-spacing: -0.02em;
   }
 }
