@@ -148,74 +148,77 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className="canvas">
-      <Canvas
-        shadows
-        flat
-        linear
-        camera={{
-          fov: 55,
-          near: 0.1,
-          far: 200,
-        }}
-        dpr={[0.5, 1]}
-        gl={{
-          antialias: false,
-          // preserveDrawingBuffer: true,
-        }}
-      >
-        <color attach="background" args={["#555"]} />
-        <Stats />
-        <Suspense fallback={<></>}>
-          <Scene />
-        </Suspense>
-        <ambientLight intensity={1} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-        <EffectComposer>
-          {/* <N8AO aoRadius={0.5} intensity={1} /> */}
-          <DepthOfField
-            target={[0, 0, 1]}
-            focalLength={0.05}
-            bokehScale={5}
-            height={600}
-          />
-          <Bloom
-            luminanceThreshold={0.75}
-            luminanceSmoothing={0.1}
-            // intensity={5.5}
-          />
-          {/* <TiltShift2 blur={0.1} /> */}
-          <N opacity={0.04} />
-          {/* <ToneMapping /> */}
-        </EffectComposer>
-        {/* <Environment preset="dawn" background blur={0.4} /> */}
-        <Environment background={false} resolution={64}>
-          <Striplight position={[10, 2, 0]} scale={[1, 3, 10]} />
-          <Striplight position={[-10, 2, 0]} scale={[1, 3, 10]} />
-          <mesh scale={70}>
-            <sphereGeometry args={[1, 64, 64]} />
-            <LayerMaterial side={THREE.BackSide}>
-              <Color color="blue" alpha={1} mode="normal" />
-              <Depth
-                colorA="#00ffff"
-                colorB="#ff8f00"
-                alpha={0.5}
-                mode="normal"
-                near={0}
-                far={300}
-                origin={[100, 100, 100]}
-              />
-              <Noise mapping="local" type="curl" scale={0.5} mode="reflect" />
-            </LayerMaterial>
-          </mesh>
-        </Environment>
-        {/* <OrbitControls ref={orbitControlsRef} /> */}
-      </Canvas>
+      <div className="wrapper">
+        <div className="canvas">
+        <Canvas
+          shadows
+          flat
+          linear
+          camera={{
+            fov: 55,
+            near: 0.1,
+            far: 200,
+          }}
+          dpr={[0.5, 1]}
+          gl={{
+            antialias: false,
+            alpha: true,
+            // preserveDrawingBuffer: true,
+          }}
+        >
+          {/* <color attach="background" args={["#555"]} /> */}
+          <Stats />
+          <Suspense fallback={<></>}>
+            <Scene />
+          </Suspense>
+          <ambientLight intensity={1} />
+          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+          <EffectComposer>
+            {/* <N8AO aoRadius={0.5} intensity={1} /> */}
+            <DepthOfField
+              target={[0, 0, 1]}
+              focalLength={0.05}
+              bokehScale={5}
+              height={600}
+            />
+            <Bloom
+              luminanceThreshold={0.75}
+              luminanceSmoothing={0.1}
+              // intensity={5.5}
+            />
+            {/* <TiltShift2 blur={0.1} /> */}
+            <N opacity={0.04} />
+            {/* <ToneMapping /> */}
+          </EffectComposer>
+          {/* <Environment preset="dawn" background blur={0.4} /> */}
+          <Environment background={false} resolution={64}>
+            <Striplight position={[10, 2, 0]} scale={[1, 3, 10]} />
+            <Striplight position={[-10, 2, 0]} scale={[1, 3, 10]} />
+            <mesh scale={70}>
+              <sphereGeometry args={[1, 64, 64]} />
+              <LayerMaterial side={THREE.BackSide}>
+                <Color color="blue" alpha={1} mode="normal" />
+                <Depth
+                  colorA="#00ffff"
+                  colorB="#ff8f00"
+                  alpha={0.5}
+                  mode="normal"
+                  near={0}
+                  far={300}
+                  origin={[100, 100, 100]}
+                />
+                <Noise mapping="local" type="curl" scale={0.5} mode="reflect" />
+              </LayerMaterial>
+            </mesh>
+          </Environment>
+          {/* <OrbitControls ref={orbitControlsRef} /> */}
+        </Canvas>
+        </div>
+        <div className="relative flex justify-center items-center min-h-[100svh] pointer-events-none">
+          <p className="leading text-base text-white mt-52 md:mt-72 tracking-widest">I'm a Front-End Developer</p>
+        </div>
+        {/* <div className="min-h-[100svh]"></div> */}
       </div>
-      <div className="relative flex justify-center items-center min-h-[100svh] pointer-events-none">
-        <p className="leading text-base text-white mt-52 md:mt-72">I'm a Front-End Developer</p>
-      </div>
-      <div className="min-h-[100svh]"></div>
     </Layout>
   )
 }

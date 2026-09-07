@@ -11,10 +11,12 @@ function Scene({
   domEls,
   selectedIndex,
   onSelect,
+  totalHeight,
 }: {
   domEls: HTMLElement[]
   selectedIndex: number | null
   onSelect: (index: number) => void
+  totalHeight: number
 }) {
   const frozen = selectedIndex !== null
 
@@ -37,6 +39,7 @@ function Scene({
           index={i}
           selected={selectedIndex === i}
           onSelect={onSelect}
+          totalHeight={totalHeight}
         />
       ))}
     </>
@@ -46,6 +49,7 @@ function Scene({
 export default function CurveSlider() {
   const slidesRef = useRef<HTMLDivElement>(null)
   const [domEls, setDomEls] = useState<HTMLElement[]>([])
+  const [totalHeight, setTotalHeight] = useState(0)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const openRef = useRef(false)
   const popupRef = useRef<HTMLImageElement | null>(null)
@@ -57,10 +61,22 @@ export default function CurveSlider() {
   }, [selectedIndex])
 
   useEffect(() => {
-    const els = Array.from(
-      slidesRef.current?.querySelectorAll(".works-slide") ?? []
-    ) as HTMLElement[]
-    setDomEls(els)
+    const compute = () => {
+      const els = Array.from(
+        slidesRef.current?.querySelectorAll(".works-slide") ?? []
+      ) as HTMLElement[]
+      setDomEls(els)
+
+      if (els.length === 0) return
+      const rects = els.map((el) => el.getBoundingClientRect())
+      const minTop = Math.min(...rects.map((r) => r.top))
+      const maxBottom = Math.max(...rects.map((r) => r.bottom))
+      const offset = 50
+      setTotalHeight(maxBottom - minTop + offset)
+    }
+    compute()
+    window.addEventListener("resize", compute)
+    return () => window.removeEventListener("resize", compute)
   }, [])
 
   useEffect(() => {
@@ -156,7 +172,7 @@ export default function CurveSlider() {
       >
         {domEls.length > 0 && (
           <Suspense fallback={null}>
-            <Scene domEls={domEls} selectedIndex={selectedIndex} onSelect={handleSelect} />
+            <Scene domEls={domEls} selectedIndex={selectedIndex} onSelect={handleSelect} totalHeight={totalHeight} />
           </Suspense>
         )}
       </Canvas>

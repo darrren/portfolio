@@ -22,6 +22,7 @@ interface Props {
   index: number
   selected: boolean
   onSelect: (index: number) => void
+  totalHeight: number
 }
 
 const getScreen = () => ({
@@ -29,9 +30,8 @@ const getScreen = () => ({
   height: window.innerHeight,
 })
 
-function CurveImage({ image, domEl, size, scroll, index, selected, onSelect }: Props) {
+function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, totalHeight }: Props) {
   const mesh = useRef<THREE.Mesh>(null!)
-  // const hitMesh = useRef<THREE.Mesh>(null!)
   const geometry = useRef<THREE.PlaneGeometry>(null!)
   const material = useRef<THREE.ShaderMaterial>(null!)
   const texture = useTexture(image)
@@ -72,10 +72,17 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect }: P
     const restSY = (vpHeight * bounds.height) / screen.height
     const restX =
       -vpWidth / 2 + restSX / 2 + (bounds.left / screen.width) * vpWidth
-    const restY =
+    let restY =
       vpHeight / 2 -
       restSY / 2 -
       ((bounds.top - scroll.current) / screen.height) * vpHeight
+
+    // Infinite loop wrap: reposition item to the other side when off-screen
+    if (totalHeight > 0) {
+      const totalVP = (totalHeight / screen.height) * vpHeight
+      const k = Math.round(restY / totalVP)
+      restY -= k * totalVP
+    }
 
     // Expanded transform: moved to the center of the screen
     const aspect = bounds.width / bounds.height
@@ -116,12 +123,6 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect }: P
       geom.computeVertexNormals()
       geom.computeBoundingSphere()
       geom.computeBoundingBox()
-      // if (hitMesh.current) {
-      //   if (hitMesh.current.geometry !== geom) hitMesh.current.geometry = geom
-      //   hitMesh.current.position.copy(mesh.current.position)
-      //   hitMesh.current.scale.copy(mesh.current.scale).multiplyScalar(1.08)
-      //   hitMesh.current.rotation.copy(mesh.current.rotation)
-      // }
     }
 
     planeRects[index] = {
@@ -157,20 +158,6 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect }: P
           fragmentShader={fragmentShader}
         />
       </mesh>
-      {/* <mesh
-        ref={hitMesh}
-        visible={false}
-        onClick={(e) => {
-          e.stopPropagation()
-          onSelect(index)
-        }}
-        onPointerOver={() => {
-          document.body.style.cursor = "pointer"
-        }}
-      >
-        <planeGeometry args={[1, 1, 10, 10]} />
-        <meshBasicMaterial transparent opacity={0} depthWrite={false} />
-      </mesh> */}
     </>
   )
 }
