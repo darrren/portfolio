@@ -7,6 +7,8 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 
 const Home = lazy(() => import('@/Pages/Home'))
+const Works = lazy(() => import('@/Pages/Works'))
+const About = lazy(() => import('@/Pages/About'))
 
 export default function App() {
   const state = UseHookstate(globalState)
@@ -55,6 +57,8 @@ export default function App() {
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             <Route path={`/`} element={<Home />} />
+            <Route path={`/about`} element={<About />} />
+            <Route path={`/works`} element={<Works />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </AnimatePresence>

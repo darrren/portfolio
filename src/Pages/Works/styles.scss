@@ -1,0 +1,78 @@
+.works {
+  &.page {
+    position: relative;
+    height: 100svh;
+    width: 100%;
+    overflow: hidden;
+    background: #eeeeee;
+  }
+
+  /* DOM slides act as invisible layout reference for the 3D projection */
+  &-slides {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -16%);
+    pointer-events: none;
+    visibility: hidden;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  &-slide {
+    .works-image {
+      position: relative;
+      width: 100%;
+    }
+
+    &.horizontal .works-image {
+      padding-top: 60%;
+    }
+
+    &.vertical .works-image {
+      padding-top: 160%;
+    }
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+  }
+
+  &-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  &-heading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #111;
+    z-index: 2;
+  }
+
+  &-kicker {
+    font-size: 12px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 0.5rem;
+  }
+
+  &-title {
+    font-size: clamp(32px, 6vw, 72px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+}
