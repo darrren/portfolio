@@ -12,6 +12,8 @@ export interface WorkItem {
   image: string
   title: string
   category: string
+  description: string
+  skills: string[]
   size: { width: number; height: number }
   width: string
 }
@@ -21,6 +23,9 @@ export const WORK_ITEMS: WorkItem[] = [
     image: img1,
     title: "Drift",
     category: "Art Direction",
+    description:
+      "A visual study of motion and stillness, exploring how layered gradients and offset geometry can suggest a sense of drifting through space.",
+    skills: ["Color Theory", "Typography", "Layout"],
     size: { width: 600, height: 375 },
     width: "25vw",
   },
@@ -28,6 +33,9 @@ export const WORK_ITEMS: WorkItem[] = [
     image: img2,
     title: "Monolith",
     category: "Editorial",
+    description:
+      "An editorial system built around a single bold structural element, using restraint and sharp contrast to frame a long-form reading experience.",
+    skills: ["Editorial Design", "Grid Systems", "Art Direction"],
     size: { width: 600, height: 960 },
     width: "23vw",
   },
@@ -35,6 +43,9 @@ export const WORK_ITEMS: WorkItem[] = [
     image: img3,
     title: "Harbour",
     category: "Photography",
+    description:
+      "A documentary series capturing the quiet rhythm of waterfront life at golden hour, graded to keep the palette warm and grounded.",
+    skills: ["Photography", "Color Grading", "Retouching"],
     size: { width: 600, height: 375 },
     width: "25vw",
   },
@@ -42,6 +53,9 @@ export const WORK_ITEMS: WorkItem[] = [
     image: img4,
     title: "Framed",
     category: "Branding",
+    description:
+      "A brand identity that treats every surface as a frame within a frame, giving a coherent system across print and digital touchpoints.",
+    skills: ["Identity", "Brand Guidelines", "Print"],
     size: { width: 600, height: 960 },
     width: "23vw",
   },
@@ -49,6 +63,9 @@ export const WORK_ITEMS: WorkItem[] = [
     image: img5,
     title: "Current",
     category: "Art Direction",
+    description:
+      "An exploration of flow and energy, translating the movement of water into a graphic language of flowing lines and rich contrast.",
+    skills: ["Concept", "Motion", "Art Direction"],
     size: { width: 600, height: 375 },
     width: "25vw",
   },
@@ -56,6 +73,9 @@ export const WORK_ITEMS: WorkItem[] = [
     image: img6,
     title: "Stack",
     category: "Editorial",
+    description:
+      "A modular editorial approach where type and image stack cleanly on strong horizontal baselines, built for flexible reuse across issues.",
+    skills: ["Editorial Design", "Typesetting", "Systems"],
     size: { width: 600, height: 375 },
     width: "25vw",
   },
@@ -63,6 +83,9 @@ export const WORK_ITEMS: WorkItem[] = [
     image: img7,
     title: "Slope",
     category: "Photography",
+    description:
+      "A small photo essay on architecture and perspective, catching the interplay between hard shadows and soft evening light.",
+    skills: ["Photography", "Composition", "Curation"],
     size: { width: 600, height: 375 },
     width: "25vw",
   },
@@ -70,6 +93,9 @@ export const WORK_ITEMS: WorkItem[] = [
     image: img8,
     title: "Grain",
     category: "Branding",
+    description:
+      "A tactile brand experiment built around film grain, imperfect marks and warm paper tones, favouring character over polish.",
+    skills: ["Identity", "Packaging", "Texture"],
     size: { width: 600, height: 375 },
     width: "25vw",
   },
@@ -77,6 +103,9 @@ export const WORK_ITEMS: WorkItem[] = [
     image: img9,
     title: "Tide",
     category: "Editorial",
+    description:
+      "A long-form feature on coastal communities, pairing expansive field photography with an unhurried, spacious typographic voice.",
+    skills: ["Editorial Design", "Photography", "Storytelling"],
     size: { width: 600, height: 960 },
     width: "23vw",
   },

@@ -4,7 +4,6 @@
     height: 100svh;
     width: 100%;
     overflow: hidden;
-    background: #eeeeee;
   }
 
   /* DOM slides act as invisible layout reference for the 3D projection */
@@ -50,6 +49,120 @@
     inset: 0;
     width: 100%;
     height: 100%;
+  }
+
+  &-popup-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    pointer-events: none;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+    will-change: transform, width, height;
+    animation: works-popup-in 0.25s 0.2s ease both;
+  }
+
+  @keyframes works-popup-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  &-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(12, 12, 14, 0.72);
+    pointer-events: none;
+    z-index: 60;
+  }
+
+  &-detail {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 3.5rem;
+    margin: 0 auto;
+    width: 90%;
+    max-width: 640px;
+    text-align: center;
+    color: #fff;
+    z-index: 70;
+    pointer-events: none;
+  }
+
+  &-detail-kicker {
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0.75rem;
+  }
+
+  &-detail-title {
+    font-size: clamp(24px, 4vw, 44px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  &-detail-desc {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0 auto 1.5rem;
+    max-width: 520px;
+  }
+
+  &-detail-skills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+
+    span {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 999px;
+      color: rgba(255, 255, 255, 0.85);
+    }
+  }
+
+  &-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    z-index: 80;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(20, 20, 22, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    padding: 0.65rem 1.1rem;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+  }
+
+  &-close-x {
+    font-size: 11px;
+    line-height: 1;
   }
 
   &-heading {
