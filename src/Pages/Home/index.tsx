@@ -1,11 +1,15 @@
 import { useRef, useState, memo, useMemo, useEffect, useCallback, Suspense, forwardRef } from "react";
+import { useHookstate as UseHookstate } from '@hookstate/core'
+import globalState from '@/Stores/state'
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Html, Environment, OrbitControls, Sphere, Stats } from "@react-three/drei";
 import { LayerMaterial, Color, Depth, Noise } from "lamina";
 import { EffectComposer, Bloom, DepthOfField, N8AO, Noise as N, TiltShift2, ToneMapping } from "@react-three/postprocessing";
+import { BlendFunction } from "postprocessing"
 import { useControls } from "leva";
 import * as THREE from "three";
 import { Physics, RigidBody } from "@react-three/rapier";
+import { motion } from 'motion/react'
 
 // COMPONENTS
 import Layout from "@/Components/Layout"
@@ -120,8 +124,8 @@ const Scene = memo(() => {
             scale={[viewport.width * 0.12, viewport.height * 0.1, 1]}
             visible={false}
           >
-            <sphereGeometry args={[5, 64]} />
-            <meshStandardMaterial color="#ffb385" />
+            <sphereGeometry args={[5, 16, 16]} />
+            <meshStandardMaterial color="#8bd8ff" wireframe />
           </mesh>
         </RigidBody>
       </Physics>
@@ -145,6 +149,30 @@ const Scene = memo(() => {
 
 export default function Home() {
   const orbitControlsRef: any = useRef();
+  const { isInit } = UseHookstate(globalState)
+
+  const container = {
+    hidden: { y: 20 },
+    visible: (i = 1) => ({
+      y: 0,
+      transition: { staggerChildren: 0.03, delayChildren: 0.04 * i + 2.5 },
+    }),
+  };
+
+  const child = {
+    hidden: {
+      y: 20,
+    },
+    visible: {
+      y: 0,
+      transition: {
+        easing: [0.6, 0.01, -0.05, 0.9],
+      //   type: "spring",
+      //   damping: 12,
+      //   stiffness: 200,
+      },
+    },
+  };
 
   return (
     <Layout>
@@ -187,7 +215,7 @@ export default function Home() {
               // intensity={5.5}
             />
             {/* <TiltShift2 blur={0.1} /> */}
-            <N opacity={0.04} />
+            <N opacity={0.12} blendFunction={BlendFunction.MULTIPLY} />
             {/* <ToneMapping /> */}
           </EffectComposer>
           {/* <Environment preset="dawn" background blur={0.4} /> */}
@@ -215,7 +243,22 @@ export default function Home() {
         </Canvas>
         </div>
         <div className="relative flex justify-center items-center min-h-[100svh] pointer-events-none">
-          <p className="leading text-base text-white mt-52 md:mt-72 tracking-widest">I'm a Front-End Developer</p>
+          {isInit && <motion.p
+            variants={container}
+            initial="hidden"
+            animate="visible"
+            className="relative overflow-hidden leading text-base text-white mt-60 md:mt-72 tracking-widest"
+          >
+            {Array.from("I'm a Senior Front-End Developer").map((letter, index) => (
+              <motion.span
+                key={index}
+                style={{ display: "inline-block" }}
+                variants={child}
+              >
+                {letter === " " ? "\u00A0" : letter}
+              </motion.span>
+            ))}
+          </motion.p>}
         </div>
         {/* <div className="min-h-[100svh]"></div> */}
       </div>

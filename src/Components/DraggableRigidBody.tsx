@@ -14,6 +14,7 @@ import {
 import React, {
   useState,
   useRef,
+  useEffect,
   ReactElement,
   useImperativeHandle,
   forwardRef,
@@ -48,6 +49,8 @@ export interface DraggableRigidBodyProps {
   > /** defaults to visibleMesh, invisibleMesh is used for the DragControls */;
 
   enableSpringJoint?: boolean /** enables wobbly physics */;
+
+  initialVelocity?: [number, number, number] /** initial linear velocity applied on mount */;
 
   jointConfig?: {
     restLength?: number;
@@ -88,6 +91,15 @@ const DraggableRigidBody = forwardRef<
     props.jointConfig?.stiffness ?? DEFAULT_SPRING_JOINT_CONFIG.stiffness,
     props.jointConfig?.damping ?? DEFAULT_SPRING_JOINT_CONFIG.damping,
   ]);
+
+  useEffect(() => {
+    if (props.initialVelocity && rigidBodyRef.current) {
+      rigidBodyRef.current.setLinvel(
+        { x: props.initialVelocity[0], y: props.initialVelocity[1], z: props.initialVelocity[2] },
+        true
+      );
+    }
+  }, [props.initialVelocity]);
 
   useFrame(() => {
     // removes unwanted joint movement when not dragged

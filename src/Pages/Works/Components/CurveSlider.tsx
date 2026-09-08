@@ -1,11 +1,16 @@
 import { useRef, useEffect, useState, Suspense, useCallback } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
+import { EffectComposer, Bloom, DepthOfField, N8AO, Noise as N, TiltShift2, ToneMapping } from "@react-three/postprocessing"
+import { BlendFunction } from "postprocessing"
+import * as THREE from "three"
 import { AnimatePresence, motion } from "motion/react"
 import CurveImage, { planeRects } from "./CurveImage"
 import { WORK_ITEMS } from "../data"
 
 const scrollTarget = { current: 0 }
 const scroll = { current: window.innerHeight * 10 }
+const scrollVelocity = { current: 0 }
+const touchActive = { current: false }
 
 function Scene({
   domEls,
@@ -22,8 +27,15 @@ function Scene({
 
   useFrame(() => {
     if (!frozen) {
+      // Carry momentum after the finger lifts
+      if (!touchActive.current) {
+        scrollTarget.current += scrollVelocity.current
+        scrollVelocity.current *= 0.94
+      }
+      // Fast drags follow tighter (scroll faster), slow drags glide
+      const speed = Math.min(0.12, 0.05 + Math.abs(scrollVelocity.current) * 0.005)
       scroll.current =
-        scroll.current + (scrollTarget.current - scroll.current) * 0.05
+        scroll.current + (scrollTarget.current - scroll.current) * speed
     }
   })
 
@@ -82,6 +94,8 @@ export default function CurveSlider() {
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
       if (!openRef.current) scrollTarget.current += e.deltaY
+      scrollVelocity.current = 0
+      touchActive.current = false
     }
     window.addEventListener("wheel", onWheel, { passive: true })
     return () => window.removeEventListener("wheel", onWheel)
@@ -89,12 +103,16 @@ export default function CurveSlider() {
 
   useEffect(() => {
     let lastY = 0
+    let lastMoveTime = 0
     let tracking = false
 
     const onTouchStart = (e: TouchEvent) => {
       if (openRef.current) return
       lastY = e.touches[0].clientY
+      lastMoveTime = e.timeStamp
       tracking = true
+      touchActive.current = true
+      scrollVelocity.current = 0
     }
 
     const onTouchMove = (e: TouchEvent) => {
@@ -103,10 +121,16 @@ export default function CurveSlider() {
       const delta = lastY - y
       scrollTarget.current += delta
       lastY = y
+      // Smooth instantaneous velocity, normalized to px per 60fps frame
+      const dt = Math.max(1, e.timeStamp - lastMoveTime)
+      lastMoveTime = e.timeStamp
+      const v = (delta / dt) * (1000 / 60)
+      scrollVelocity.current = scrollVelocity.current * 0.6 + v * 0.4
     }
 
     const onTouchEnd = () => {
       tracking = false
+      touchActive.current = false
     }
 
     window.addEventListener("touchstart", onTouchStart, { passive: true })
@@ -164,17 +188,23 @@ export default function CurveSlider() {
       </div>
 
       <Canvas
-        className="works-canvas"
-        dpr={[1, 2]}
+        shadows
+        flat
+        linear
+        dpr={[0.5, 1]}
         camera={{ fov: 45, near: 0.001, far: 1000, position: [0, 0, 5] }}
         gl={{ antialias: false, alpha: true }}
         // onCreated={({ gl }) => gl.setClearColor(0x000000, 1)}
+        className={`works-canvas ${selectedItem ? "!pointer-events-none" : ""}`}
       >
         {domEls.length > 0 && (
           <Suspense fallback={null}>
             <Scene domEls={domEls} selectedIndex={selectedIndex} onSelect={handleSelect} totalHeight={totalHeight} />
           </Suspense>
         )}
+        <EffectComposer>
+          <N opacity={0.06} blendFunction={BlendFunction.MULTIPLY} />
+        </EffectComposer>
       </Canvas>
 
       {selectedItem && (

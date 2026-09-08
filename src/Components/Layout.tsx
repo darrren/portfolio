@@ -76,8 +76,8 @@ export default function Layout({ children }: Props) {
       })
       gsap.ticker.lagSmoothing(0)
 
-      lenis.stop()
-      window.lenis = lenis
+      lenis.stop();
+      (window as any).lenis = lenis
       lenisScroll.set(lenis)
     }
     return () => {

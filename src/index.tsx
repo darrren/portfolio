@@ -9,13 +9,6 @@ import Header from '@/Components/Header'
 
 import './index.scss'
 
-declare const window: any
-declare global {
-  interface Window {
-    lenis: any
-  }
-}
-
 const rootElement = document.getElementById("root")!;
 const root = ReactDOM.createRoot(rootElement);
 

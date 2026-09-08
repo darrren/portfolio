@@ -38,6 +38,11 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, tot
   const { camera } = useThree()
   const cam = camera as THREE.PerspectiveCamera
   const progress = useRef(0)
+  const hoverProgress = useRef(0)
+  const hovered = useRef(false)
+  const pointerTarget = useRef({ x: 0.5, y: 0.5 })
+  const rgbShift = useRef(0)
+  const prevScroll = useRef(scroll.current)
 
   const uniforms = useMemo(
     () => ({
@@ -46,6 +51,10 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, tot
       uImageSizes: { value: [size.width, size.height] },
       uVisibility: { value: 1 },
       uDirection: { value: 0.0 },
+      uTime: { value: 0 },
+      uHover: { value: 0 },
+      uPointer: { value: [0.5, 0.5] },
+      uRGBShift: { value: 0 },
     }),
     [texture, size.width, size.height]
   )
@@ -56,10 +65,26 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, tot
     }
   }, [index])
 
-  useFrame(() => {
+  useFrame((state) => {
     const target = selected ? 1 : 0
     progress.current += (target - progress.current) * 0.08
     const t = progress.current
+
+    const hoverTarget = hovered.current ? 1 : 0
+    hoverProgress.current += (hoverTarget - hoverProgress.current) * 0.1
+    material.current.uniforms.uTime.value = state.clock.elapsedTime
+    material.current.uniforms.uHover.value = hoverProgress.current
+    material.current.uniforms.uPointer.value = [
+      pointerTarget.current.x,
+      pointerTarget.current.y,
+    ]
+
+    // RGB split driven by scroll velocity: sign follows direction, eased to 0
+    const scrollSpeed = scroll.current - prevScroll.current
+    prevScroll.current = scroll.current
+    const rgbTarget = Math.max(-0.5, Math.min(0.5, scrollSpeed * 0.02))
+    rgbShift.current += (rgbTarget - rgbShift.current) * 0.08
+    material.current.uniforms.uRGBShift.value = rgbShift.current
 
     const screen = getScreen()
     const bounds = domEl.getBoundingClientRect()
@@ -117,7 +142,7 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, tot
       for (let i = 0, l = pos.count; i < l; i++) {
         const viewY = pos.getY(i) * scaleY + mesh.current.position.y
         const distortion = Math.sin((viewY / vpHeight) * Math.PI + Math.PI / 2)
-        pos.setZ(i, distortion * 0.28 * uDistort)
+        pos.setZ(i, distortion * 0.48 * uDistort)
       }
       pos.needsUpdate = true
       geom.computeVertexNormals()
@@ -141,18 +166,30 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, tot
           e.stopPropagation()
           onSelect(index)
         }}
-        onPointerOver={() => {
+        onPointerOver={(e) => {
+          hovered.current = true
+          if (e.uv) {
+            // pointerTarget.current.x = e.uv.x
+            // pointerTarget.current.y = e.uv.y
+          }
           document.body.style.cursor = "pointer"
         }}
+        onPointerMove={(e) => {
+          if (e.uv) {
+            // pointerTarget.current.x = e.uv.x
+            // pointerTarget.current.y = e.uv.y
+          }
+        }}
         onPointerOut={() => {
+          hovered.current = false
           document.body.style.cursor = ""
         }}
       >
-        <planeGeometry ref={geometry} args={[1, 1, 10, 10]} />
+        <planeGeometry ref={geometry} args={[1, 1, 20, 20]} />
         <shaderMaterial
           ref={material}
-          transparent
-          side={THREE.DoubleSide}
+          // transparent
+          // side={THREE.DoubleSide}
           uniforms={uniforms}
           vertexShader={vertexShader}
           fragmentShader={fragmentShader}

@@ -70,7 +70,7 @@ export default function Loading() {
             loadedKey.current = []
             console.log('%cAll loaded.', 'background:#00ff00; color:#fff; padding:2px;')
             window.dispatchEvent(new Event('resize'))
-            if(window.lenis) window.lenis.start()
+            if ((window as any).lenis) (window as any).lenis.start()
           }, 200)
           // return false
         }
