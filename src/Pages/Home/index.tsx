@@ -13,7 +13,11 @@ import { motion } from 'motion/react'
 
 // COMPONENTS
 import Layout from "@/Components/Layout"
+import ScanWireframe from "@/Pages/Home/Components/ScanWireframe"
 import { Model } from "@/Components/balloon"
+
+// HOOKS
+import { useMediaQuery } from '@/Hooks/use-media-query'
 
 import "./styles.scss";
 
@@ -26,21 +30,11 @@ function Striplight(props: any) {
   );
 }
 
-const Scene = memo(() => {
+const Scene = memo(({ resetTrigger = 0, onResetTrigger }: { resetTrigger?: number; onResetTrigger?: () => void }) => {
   const { gl, viewport } = useThree();
   const meshRef: any = useRef();
   const [domEl, setDomEl] = useState();
-
-  // const { brushSize, brushHardness, brushStrength, brushColor } = useControls(
-  //   "Brush Settings",
-  //   {
-  //     brushSize: { value: 0.1, min: 0.01, max: 0.5, label: "Size" },
-  //     brushHardness: { value: 0.5, min: 0.1, max: 1, label: "Hardness" },
-  //     brushStrength: { value: 0.5, min: 0.1, max: 1, label: "Strength" },
-  //     brushColor: { value: { r: 255, g: 255, b: 0 }, label: "Color" },
-  //   },
-  //   { order: 1, collapsed: true }
-  // );
+  const isMobile = useMediaQuery("(max-width: 767px)")
 
   const onBeforeCompile = useCallback((shader: any) => {
     shader.vertexShader =
@@ -71,78 +65,23 @@ const Scene = memo(() => {
       return;
     }`
     );
-
-    // shader.uniforms.uMatrixWorld = { value: meshRef.current.matrixWorld };
-    // shader.uniforms.uBrushColor = {
-    //   value: [brushColor.r / 255, brushColor.g / 255, brushColor.b / 255],
-    // };
-    // shader.uniforms.uBrushSize = { value: brushSize };
-    // shader.uniforms.uBrushHardness = { value: brushHardness };
-    // shader.uniforms.uBrushStrength = { value: brushStrength };
-    // shader.uniforms.uCursorPosition = { value: new THREE.Vector3(0, 0, 0) };
-    // shader.uniforms.uOriginalTexture = { value: model.material.map }; //{ value: originalTexture };
-
-    // uvMaterialRef.current.userData.shader = shader;
-  }, []);
-
-  useFrame(({ gl }) => {
-    // if (isDrawing.current) drawing();
-    // const shader = uvMaterialRef.current?.userData.shader;
-    // if (shader) {
-    //   shader.uniforms.uBrushColor = {
-    //     value: [brushColor.r / 255, brushColor.g / 255, brushColor.b / 255],
-    //   };
-    //   shader.uniforms.uBrushSize = { value: brushSize };
-    //   shader.uniforms.uBrushHardness = { value: brushHardness };
-    //   shader.uniforms.uBrushStrength = { value: brushStrength };
-    // }
-    // uvMeshRef.current.material.needsUpdate = true;
-  });
-
-  const onPointerDown = useCallback(() => {}, []);
-  const onPointerMove = useCallback((e: any) => {
-    // const shader = uvMaterialRef.current?.userData.shader;
-    // if (shader)
-    //   shader.uniforms.uCursorPosition = {
-    //     value: new THREE.Vector3(e.point.x, e.point.y, e.point.z),
-    //   };
   }, []);
 
   return (
     <>
       <Physics gravity={[0, 0, 0]} debug={false} timeStep={1 / 30}>
-        <Model position={[0, 0, 0]} scale={[1, 1, 1]} />
+        <Model position={[0, 0, 0]} scale={[1, 1, 1]} resetTrigger={resetTrigger} onResetTrigger={onResetTrigger} />
         <RigidBody
           type="fixed"
           colliders="trimesh"
           name="floor"
           includeInvisible
-          // position={[0, 1, 0]}
-          // rotation={[Math.PI * 1.5, 0, 0]}
         >
-          <mesh
-            scale={[viewport.width * 0.12, viewport.height * 0.1, 1]}
-            visible={false}
-          >
-            <sphereGeometry args={[5, 16, 16]} />
-            <meshStandardMaterial color="#8bd8ff" wireframe />
-          </mesh>
+          <ScanWireframe
+            scale={[viewport.width * 0.12, viewport.height * 0.1, isMobile ? 1 : 3]}
+          />
         </RigidBody>
       </Physics>
-      {/* <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial />
-      </mesh> */}
-      {/* <Html
-        wrapperClass="leading"
-        position={[0, -0.9, 0]}
-        distanceFactor={10}
-        center
-        zIndexRange={[10, 0]}
-        // occlude="blending"
-      >
-        <p>I'm a Front-End Developer</p>
-      </Html> */}
     </>
   );
 });
@@ -150,6 +89,11 @@ const Scene = memo(() => {
 export default function Home() {
   const orbitControlsRef: any = useRef();
   const { isInit } = UseHookstate(globalState)
+  const [resetTrigger, setResetTrigger] = useState(0);
+
+  const handleReset = () => {
+    setResetTrigger((prev) => prev + 1);
+  };
 
   const container = {
     hidden: { y: 20 },
@@ -197,7 +141,7 @@ export default function Home() {
           {/* <color attach="background" args={["#555"]} /> */}
           <Stats />
           <Suspense fallback={<></>}>
-            <Scene />
+            <Scene resetTrigger={resetTrigger} onResetTrigger={handleReset} />
           </Suspense>
           <ambientLight intensity={1} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
@@ -261,6 +205,13 @@ export default function Home() {
           </motion.p>}
         </div>
         {/* <div className="min-h-[100svh]"></div> */}
+        <button
+          onClick={handleReset}
+          className="absolute bottom-14 md:bottom-20 right-6 z-10 px-4 py-2 text-[10px] md:text-xs tracking-widest text-white border border-white/40 rounded-full bg-white/5 backdrop-blur-sm hover:bg-white/15 transition"
+        >
+          Reset Position
+        </button>
+        <p className="absolute bottom-5 left-0 w-full text-[10px] md:text-xs text-neutral-400 text-center tracking-widest">Copyright © {new Date().getFullYear()} Darren Chan. All rights reserved.</p>
       </div>
     </Layout>
   )

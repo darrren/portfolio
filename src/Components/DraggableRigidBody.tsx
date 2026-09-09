@@ -52,6 +52,8 @@ export interface DraggableRigidBodyProps {
 
   initialVelocity?: [number, number, number] /** initial linear velocity applied on mount */;
 
+  resetTrigger?: number /** increment to reset position and rotation to initial */;
+
   jointConfig?: {
     restLength?: number;
     stiffness?: number;
@@ -79,6 +81,8 @@ const DraggableRigidBody = forwardRef<
   const meshRef = useRef<THREE.Mesh>(null);
   const invisibleDragControlsMeshRef = useRef<THREE.Mesh>(null);
 
+  const resetTargetRef = useRef<THREE.Vector3 | null>(null);
+
   useImperativeHandle(ref, () => ({
     getInvisibleMesh: () => invisibleDragControlsMeshRef.current,
     getVisibleMesh: () => meshRef.current,
@@ -100,6 +104,54 @@ const DraggableRigidBody = forwardRef<
       );
     }
   }, [props.initialVelocity]);
+
+  useEffect(() => {
+    if (props.resetTrigger === undefined) return;
+    if (!rigidBodyRef.current || !meshRef.current) return;
+
+    const body = new THREE.Object3D();
+
+    if (props.groupProps?.position) {
+      const pos = props.groupProps.position as unknown as {
+        x?: number;
+        y?: number;
+        z?: number;
+        [index: number]: number;
+      };
+      body.position.set(
+        pos.x ?? pos[0],
+        pos.y ?? pos[1],
+        pos.z ?? pos[2]
+      );
+    }
+    body.rotation.set(0,0,0);
+
+    const { x, y, z } = body.position;
+    resetTargetRef.current = new THREE.Vector3(x, y, z);
+    rigidBodyRef.current.setRotation(body.quaternion, true);
+    rigidBodyRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    rigidBodyRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
+    rigidBodyRef.current.wakeUp();
+  }, [props.resetTrigger]);
+
+  useFrame(() => {
+    // smoothly lerp the position back to the reset target
+    if (!resetTargetRef.current || !rigidBodyRef.current || isDragging) return;
+
+    const current = rigidBodyRef.current.translation();
+    const next = new THREE.Vector3(current.x, current.y, current.z).lerp(
+      resetTargetRef.current,
+      0.1
+    );
+
+    if (next.distanceTo(resetTargetRef.current) < 0.001) {
+      rigidBodyRef.current.setTranslation(resetTargetRef.current, false);
+      resetTargetRef.current = null;
+      return;
+    }
+
+    rigidBodyRef.current.setTranslation(next, false);
+  });
 
   useFrame(() => {
     // removes unwanted joint movement when not dragged
