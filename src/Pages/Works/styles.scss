@@ -1,0 +1,147 @@
+.works {
+  &.page {
+    @apply relative w-full h-[100svh] overflow-hidden;
+  }
+
+  /* DOM slides act as invisible layout reference for the 3D projection */
+  &-slides {
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[16%] pointer-events-none invisible w-full flex flex-wrap justify-center items-center gap-8;
+  }
+
+  &-slide {
+    @apply w-10/12 md:w-[25vw];
+    .works-image {
+      @apply relative w-full;
+    }
+
+    &.horizontal .works-image {
+      @apply pt-[60%];
+    }
+
+    &.vertical .works-image {
+      @apply pt-[160%];
+    }
+
+    img {
+      @apply absolute top-0 left-0 w-full;
+    }
+  }
+
+  &-canvas {
+    @apply absolute inset-0 w-full h-full;
+  }
+
+  &-popup-img {
+    @apply absolute top-0 left-0 block pointer-events-none object-cover;
+    will-change: transform, width, height;
+    animation: works-popup-in 0.25s 0.2s ease both;
+  }
+
+  @keyframes works-popup-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  &-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(12, 12, 14, 0.72);
+    pointer-events: none;
+    z-index: 60;
+  }
+
+  &-detail {
+    @apply absolute left-0 bottom-0 mx-auto px-4 py-8 md:py-14 md:pt-24 w-full text-center text-white z-[70] pointer-events-none;
+    background-image: linear-gradient(#ffffff00, #ac63f6);
+  }
+
+  &-detail-kicker {
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0.75rem;
+  }
+
+  &-detail-title {
+    font-size: clamp(24px, 4vw, 44px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  &-detail-desc {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0 auto 1.5rem;
+    max-width: 520px;
+  }
+
+  &-detail-skills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+
+    span {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 999px;
+      color: rgba(255, 255, 255, 0.85);
+    }
+  }
+
+  &-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    z-index: 80;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(20, 20, 22, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 999px;
+    padding: 0.65rem 1.1rem;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+  }
+
+  &-close-x {
+    font-size: 11px;
+    line-height: 1;
+  }
+
+  &-heading {
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-white w-full;
+  }
+
+  &-kicker {
+    font-size: 12px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 0.5rem;
+  }
+
+  &-title {
+    font-size: clamp(32px, 6vw, 72px);
+    font-weight: 500;
+  }
+}

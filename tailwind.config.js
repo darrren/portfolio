@@ -48,6 +48,18 @@ module.exports = {
 				'PMingLiU',
 				...defaultTheme.fontFamily.sans
 			],
+			serif: [
+				'Noto Serif TC',
+				'Arial',
+				'Helvetica',
+				'微軟正黑體',
+				'Microsoft JhengHei',
+				'Heiti TC',
+				'LiHei Pro',
+				'新細明體',
+				'PMingLiU',
+				...defaultTheme.fontFamily.serif
+			]
 		},
 		aspectRatio: { // defaults to {}
 			'none': 0,

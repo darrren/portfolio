@@ -17,8 +17,27 @@ export function Model(props: any) {
   const [s] = useState<{ mouse: { x: number; y: number } | null }>({
     mouse: null,
   });
+  const [isMove, setIsMove] = useState(false);
+  const { resetTrigger = 0, onResetTrigger } = props;
+
+  const letterVelocities: [number, number, number][] = [
+    [1.8, 1.6, 1.3],    // H
+    [-1.5, 1.9, -1.2],   // E
+    [1.3, 1.7, 1.6],     // L
+    [-1.7, 1.5, 1.4],    // L
+    [1.6, 1.4, 1.5],    // O
+    [-1.4, 1.8, -1.3],   // !
+    [1.5, 1.3, 1.7],     // !
+    [-1.6, -1.5, 1.2],   // W
+    [1.4, -1.6, -1.5],    // O
+    [-1.3, -1.7, 1.4],    // R
+    [1.7, -1.3, -1.6],   // L
+    [-1.5, -1.4, 1.5],    // D
+  ];
+
   const draggableRigidBodyProps: Partial<DraggableRigidBodyProps> = {
     rigidBodyProps: {
+      friction: 0,
       gravityScale: 3.5,
       linearDamping: 0,
       angularDamping: 0,
@@ -62,14 +81,36 @@ export function Model(props: any) {
         );
       });
     }, 1000);
+    setTimeout(() => {
+      // setIsMove(true)
+    }, 5000)
 
     const handleMouseUp = () => {
       setDragging(false);
     };
     window.addEventListener("pointerup", handleMouseUp);
 
+    // let touchTimer: ReturnType<typeof setTimeout> | null = null;
+    // const handleTouchStart = () => {
+    //   if (touchTimer) clearTimeout(touchTimer);
+    //   touchTimer = setTimeout(() => {
+    //     onResetTrigger?.();
+    //   }, 2000);
+    // };
+    // const handleTouchEnd = () => {
+    //   if (touchTimer) {
+    //     clearTimeout(touchTimer);
+    //     touchTimer = null;
+    //   }
+    // };
+    // window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    // window.addEventListener("touchend", handleTouchEnd, { passive: true });
+
     return () => {
       window.removeEventListener("pointerup", handleMouseUp);
+      // window.removeEventListener("touchstart", handleTouchStart);
+      // window.removeEventListener("touchend", handleTouchEnd);
+      // if (touchTimer) clearTimeout(touchTimer);
     };
   }, []);
 
@@ -78,6 +119,8 @@ export function Model(props: any) {
       <group ref={ref} {...props} dispose={null}>
         <DraggableRigidBody
           {...draggableRigidBodyProps}
+          resetTrigger={resetTrigger}
+          initialVelocity={isMove ? letterVelocities[0] : [0, 0, 0]}
           groupProps={{
             position: [-1.11, 0.294, -0.11],
           }}
@@ -97,6 +140,8 @@ export function Model(props: any) {
         />
         <DraggableRigidBody
           {...draggableRigidBodyProps}
+          resetTrigger={resetTrigger}
+          initialVelocity={isMove ? letterVelocities[1] : [0, 0, 0]}
           groupProps={{
             position: [-0.587, 0.289, 0.11],
           }}
@@ -117,6 +162,8 @@ export function Model(props: any) {
 
         <DraggableRigidBody
           {...draggableRigidBodyProps}
+          resetTrigger={resetTrigger}
+          initialVelocity={isMove ? letterVelocities[2] : [0, 0, 0]}
           groupProps={{
             position: [-0.181, 0.255, -0.11],
           }}
@@ -136,6 +183,8 @@ export function Model(props: any) {
         />
         <DraggableRigidBody
           {...draggableRigidBodyProps}
+          resetTrigger={resetTrigger}
+          initialVelocity={isMove ? letterVelocities[3] : [0, 0, 0]}
           groupProps={{
             position: [0.282, 0.256, -0.11],
           }}
@@ -155,6 +204,8 @@ export function Model(props: any) {
         />
         <DraggableRigidBody
           {...draggableRigidBodyProps}
+          resetTrigger={resetTrigger}
+          initialVelocity={isMove ? letterVelocities[4] : [0, 0, 0]}
           groupProps={{
             position: [0.829, 0.291, -0.41],
           }}
@@ -174,6 +225,8 @@ export function Model(props: any) {
         />
         <DraggableRigidBody
           {...draggableRigidBodyProps}
+          resetTrigger={resetTrigger}
+          initialVelocity={isMove ? letterVelocities[5] : [0, 0, 0]}
           groupProps={{
             position: [1.161, 0.136, -0.147],
           }}
@@ -193,6 +246,8 @@ export function Model(props: any) {
         />
         <DraggableRigidBody
           {...draggableRigidBodyProps}
+          resetTrigger={resetTrigger}
+          initialVelocity={isMove ? letterVelocities[6] : [0, 0, 0]}
           groupProps={{
             position: [1.297, 0.37, -0.073],
           }}
@@ -212,6 +267,8 @@ export function Model(props: any) {
         />
         <DraggableRigidBody
           {...draggableRigidBodyProps}
+          resetTrigger={resetTrigger}
+          initialVelocity={isMove ? letterVelocities[7] : [0, 0, 0]}
           groupProps={{
             position: [-1.048, -0.361, -0.11],
           }}
@@ -231,6 +288,8 @@ export function Model(props: any) {
         />
         <DraggableRigidBody
           {...draggableRigidBodyProps}
+          resetTrigger={resetTrigger}
+          initialVelocity={isMove ? letterVelocities[8] : [0, 0, 0]}
           groupProps={{
             position: [-0.43, -0.358, 0.11],
           }}
@@ -250,6 +309,8 @@ export function Model(props: any) {
         />
         <DraggableRigidBody
           {...draggableRigidBodyProps}
+          resetTrigger={resetTrigger}
+          initialVelocity={isMove ? letterVelocities[9] : [0, 0, 0]}
           groupProps={{
             position: [0.094, -0.365, -0.11],
           }}
@@ -269,6 +330,8 @@ export function Model(props: any) {
         />
         <DraggableRigidBody
           {...draggableRigidBodyProps}
+          resetTrigger={resetTrigger}
+          initialVelocity={isMove ? letterVelocities[10] : [0, 0, 0]}
           groupProps={{
             position: [0.559, -0.393, 0.11],
           }}
@@ -288,6 +351,8 @@ export function Model(props: any) {
         />
         <DraggableRigidBody
           {...draggableRigidBodyProps}
+          resetTrigger={resetTrigger}
+          initialVelocity={isMove ? letterVelocities[11] : [0, 0, 0]}
           groupProps={{
             position: [1.05, -0.359, -0.11],
           }}

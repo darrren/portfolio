@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useEffect, Suspense, lazy } from "react"
+import { useState, useLayoutEffect, useEffect, lazy, Suspense } from "react"
 import { Routes, Route, useLocation, useParams, useNavigate, Navigate } from "react-router-dom"
 import { AnimatePresence, LazyMotion, domAnimation, MotionConfig } from "motion/react"
 import { useHookstate as UseHookstate } from '@hookstate/core'
@@ -7,6 +7,8 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 
 const Home = lazy(() => import('@/Pages/Home'))
+const Works = lazy(() => import('@/Pages/Works'))
+const About = lazy(() => import('@/Pages/About'))
 
 export default function App() {
   const state = UseHookstate(globalState)
@@ -51,14 +53,16 @@ export default function App() {
   return (
     <div className="App">
       <Suspense fallback={<></>}>
-        <LazyMotion features={domAnimation}>
-          <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
-              <Route path={`/`} element={<Home />} />
-              <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-          </AnimatePresence>
-        </LazyMotion>
+      <LazyMotion features={domAnimation}>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path={`/`} element={<Home />} />
+            <Route path={`/about`} element={<About />} />
+            <Route path={`/works`} element={<Works />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </AnimatePresence>
+      </LazyMotion>
       </Suspense>
     </div>
   );

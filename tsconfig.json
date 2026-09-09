@@ -25,6 +25,9 @@
       "paths": {
         "@/*": [
           "./*"
+        ],
+        "postprocessing": [
+          "../node_modules/postprocessing/build/types/index.d.ts"
         ]
       },
       "noImplicitAny": true,
