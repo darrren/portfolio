@@ -31,6 +31,9 @@ export const DEFAULT_SPRING_JOINT_CONFIG = {
   collisionGroups: 2,
 };
 
+const _tempVec = new THREE.Vector3();
+const _tempVec2 = new THREE.Vector3();
+
 export interface DraggableRigidBodyProps {
   groupProps?: GroupProps /** set position coordinates here */;
 
@@ -139,18 +142,18 @@ const DraggableRigidBody = forwardRef<
     if (!resetTargetRef.current || !rigidBodyRef.current || isDragging) return;
 
     const current = rigidBodyRef.current.translation();
-    const next = new THREE.Vector3(current.x, current.y, current.z).lerp(
+    _tempVec.set(current.x, current.y, current.z).lerp(
       resetTargetRef.current,
       0.1
     );
 
-    if (next.distanceTo(resetTargetRef.current) < 0.001) {
+    if (_tempVec.distanceTo(resetTargetRef.current) < 0.001) {
       rigidBodyRef.current.setTranslation(resetTargetRef.current, false);
       resetTargetRef.current = null;
       return;
     }
 
-    rigidBodyRef.current.setTranslation(next, false);
+    rigidBodyRef.current.setTranslation(_tempVec, false);
   });
 
   useFrame(() => {
@@ -251,16 +254,15 @@ const DraggableRigidBody = forwardRef<
       return;
 
     // update position
-    const position = new THREE.Vector3();
-    invisibleDragControlsMeshRef.current.getWorldPosition(position);
+    invisibleDragControlsMeshRef.current.getWorldPosition(_tempVec2);
 
     if (jointRigidBodyRef.current) {
-      jointRigidBodyRef.current.setNextKinematicTranslation(position);
+      jointRigidBodyRef.current.setNextKinematicTranslation(_tempVec2);
       return;
     }
 
     rigidBodyRef.current.setNextKinematicTranslation(
-      getBoxedPosition(position)
+      getBoxedPosition(_tempVec2)
     );
   };
 

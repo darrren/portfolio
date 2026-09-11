@@ -127,8 +127,8 @@ export function Model(props: any) {
           visibleMesh={
             <mesh
               visible={false}
-              castShadow
-              receiveShadow
+              // castShadow
+              // receiveShadow
               geometry={(nodes.H as THREE.Mesh).geometry}
               material={materials["Material.001"]}
               // position={[-1.11, 0.294, -0.11]}
@@ -148,8 +148,8 @@ export function Model(props: any) {
           visibleMesh={
             <mesh
               visible={false}
-              castShadow
-              receiveShadow
+              // castShadow
+              // receiveShadow
               geometry={(nodes.E as THREE.Mesh).geometry}
               material={materials["Material.001"]}
               // position={[-0.587, 0.289, -0.11]}
@@ -170,8 +170,8 @@ export function Model(props: any) {
           visibleMesh={
             <mesh
               visible={false}
-              castShadow
-              receiveShadow
+              // castShadow
+              // receiveShadow
               geometry={(nodes.L001 as THREE.Mesh).geometry}
               material={materials["Material.001"]}
               // position={[-0.181, 0.255, -0.11]}
@@ -191,8 +191,8 @@ export function Model(props: any) {
           visibleMesh={
             <mesh
               visible={false}
-              castShadow
-              receiveShadow
+              // castShadow
+              // receiveShadow
               geometry={(nodes.L002 as THREE.Mesh).geometry}
               material={materials["Material.001"]}
               // position={[0.282, 0.256, -0.11]}
@@ -212,8 +212,8 @@ export function Model(props: any) {
           visibleMesh={
             <mesh
               visible={false}
-              castShadow
-              receiveShadow
+              // castShadow
+              // receiveShadow
               geometry={(nodes.O001 as THREE.Mesh).geometry}
               material={materials["Material.001"]}
               // position={[0.829, 0.291, -0.11]}
@@ -233,8 +233,8 @@ export function Model(props: any) {
           visibleMesh={
             <mesh
               visible={false}
-              castShadow
-              receiveShadow
+              // castShadow
+              // receiveShadow
               geometry={(nodes["!"] as THREE.Mesh).geometry}
               material={materials["Material.001"]}
               // position={[1.161, 0.136, -0.147]}
@@ -254,8 +254,8 @@ export function Model(props: any) {
           visibleMesh={
             <mesh
               visible={false}
-              castShadow
-              receiveShadow
+              // castShadow
+              // receiveShadow
               geometry={(nodes["!001"] as THREE.Mesh).geometry}
               material={materials["Material.001"]}
               // position={[1.297, 0.37, -0.073]}
@@ -275,8 +275,8 @@ export function Model(props: any) {
           visibleMesh={
             <mesh
               visible={false}
-              castShadow
-              receiveShadow
+              // castShadow
+              // receiveShadow
               geometry={(nodes.W as THREE.Mesh).geometry}
               material={materials["Material.001"]}
               // position={[-1.048, -0.361, -0.11]}
@@ -296,8 +296,8 @@ export function Model(props: any) {
           visibleMesh={
             <mesh
               visible={false}
-              castShadow
-              receiveShadow
+              // castShadow
+              // receiveShadow
               geometry={(nodes.O as THREE.Mesh).geometry}
               material={materials["Material.001"]}
               // position={[-0.43, -0.358, -0.11]}
@@ -317,8 +317,8 @@ export function Model(props: any) {
           visibleMesh={
             <mesh
               visible={false}
-              castShadow
-              receiveShadow
+              // castShadow
+              // receiveShadow
               geometry={(nodes.R as THREE.Mesh).geometry}
               material={materials["Material.001"]}
               // position={[0.094, -0.365, -0.11]}
@@ -338,8 +338,8 @@ export function Model(props: any) {
           visibleMesh={
             <mesh
               visible={false}
-              castShadow
-              receiveShadow
+              // castShadow
+              // receiveShadow
               geometry={(nodes.L as THREE.Mesh).geometry}
               material={materials["Material.001"]}
               // position={[0.559, -0.393, -0.11]}
@@ -359,8 +359,8 @@ export function Model(props: any) {
           visibleMesh={
             <mesh
               visible={false}
-              castShadow
-              receiveShadow
+              // castShadow
+              // receiveShadow
               geometry={(nodes.D as THREE.Mesh).geometry}
               material={materials["Material.001"]}
               // position={[1.05, -0.359, -0.11]}

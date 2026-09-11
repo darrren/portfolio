@@ -123,7 +123,7 @@ export default function Home() {
       <div className="wrapper">
         <div className="canvas">
         <Canvas
-          shadows
+          // shadows
           flat
           linear
           camera={{
@@ -139,35 +139,31 @@ export default function Home() {
           }}
         >
           {/* <color attach="background" args={["#555"]} /> */}
-          <Stats />
+          {process.env.NODE_ENV === "development" && <Stats />}
           <Suspense fallback={<></>}>
             <Scene resetTrigger={resetTrigger} onResetTrigger={handleReset} />
           </Suspense>
           <ambientLight intensity={1} />
           <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-          <EffectComposer>
-            {/* <N8AO aoRadius={0.5} intensity={1} /> */}
+          <EffectComposer multisampling={0}>
             <DepthOfField
               target={[0, 0, 1]}
               focalLength={0.05}
               bokehScale={5}
-              height={600}
+              height={192}
             />
             <Bloom
               luminanceThreshold={0.75}
               luminanceSmoothing={0.1}
-              // intensity={5.5}
             />
-            {/* <TiltShift2 blur={0.1} /> */}
             <N opacity={0.12} blendFunction={BlendFunction.MULTIPLY} />
-            {/* <ToneMapping /> */}
           </EffectComposer>
           {/* <Environment preset="dawn" background blur={0.4} /> */}
           <Environment background={false} resolution={64}>
             <Striplight position={[10, 2, 0]} scale={[1, 3, 10]} />
             <Striplight position={[-10, 2, 0]} scale={[1, 3, 10]} />
             <mesh scale={70}>
-              <sphereGeometry args={[1, 64, 64]} />
+              <sphereGeometry args={[1, 32, 16]} />
               <LayerMaterial side={THREE.BackSide}>
                 <Color color="blue" alpha={1} mode="normal" />
                 <Depth

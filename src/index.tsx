@@ -9,6 +9,13 @@ import Header from '@/Components/Header'
 
 import './index.scss'
 
+// remove console.log in production
+if(process.env.NODE_ENV === 'production') {
+  console.log = () => {}
+  console.warn = () => {}
+  console.debug = () => {}
+}
+
 const rootElement = document.getElementById("root")!;
 const root = ReactDOM.createRoot(rootElement);
 

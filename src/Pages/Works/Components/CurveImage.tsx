@@ -43,6 +43,7 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, tot
   const pointerTarget = useRef({ x: 0.5, y: 0.5 })
   const rgbShift = useRef(0)
   const prevScroll = useRef(scroll.current)
+  const scrollScale = useRef(1)
 
   const uniforms = useMemo(
     () => ({
@@ -55,6 +56,7 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, tot
       uHover: { value: 0 },
       uPointer: { value: [0.5, 0.5] },
       uRGBShift: { value: 0 },
+      uScale: { value: 1 },
     }),
     [texture, size.width, size.height]
   )
@@ -85,6 +87,11 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, tot
     const rgbTarget = Math.max(-0.5, Math.min(0.5, scrollSpeed * 0.02))
     rgbShift.current += (rgbTarget - rgbShift.current) * 0.08
     material.current.uniforms.uRGBShift.value = rgbShift.current
+
+    // Scroll-driven scale via shader: images subtly grow while scrolling, ease back to 1
+    const scrollScaleTarget = 1 + Math.min(Math.abs(scrollSpeed) * 0.008, 1.12)
+    scrollScale.current += (scrollScaleTarget - scrollScale.current) * 0.06
+    material.current.uniforms.uScale.value = scrollScale.current
 
     const screen = getScreen()
     const bounds = domEl.getBoundingClientRect()

@@ -8,7 +8,7 @@ import CurveImage, { planeRects } from "./CurveImage"
 import { WORK_ITEMS } from "../data"
 
 const scrollTarget = { current: 0 }
-const scroll = { current: window.innerHeight * 10 }
+const scroll = { current: window.innerHeight * 5 }
 const scrollVelocity = { current: 0 }
 const touchActive = { current: false }
 
@@ -188,7 +188,7 @@ export default function CurveSlider() {
       </div>
 
       <Canvas
-        shadows
+        // shadows
         flat
         linear
         dpr={[0.5, 1]}
@@ -202,7 +202,7 @@ export default function CurveSlider() {
             <Scene domEls={domEls} selectedIndex={selectedIndex} onSelect={handleSelect} totalHeight={totalHeight} />
           </Suspense>
         )}
-        <EffectComposer>
+        <EffectComposer multisampling={0}>
           <N opacity={0.06} blendFunction={BlendFunction.MULTIPLY} />
         </EffectComposer>
       </Canvas>
