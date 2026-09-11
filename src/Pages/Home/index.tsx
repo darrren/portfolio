@@ -120,95 +120,93 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className="wrapper">
-        <div className="canvas">
-        <Canvas
-          // shadows
-          flat
-          linear
-          camera={{
-            fov: 55,
-            near: 0.1,
-            far: 200,
-          }}
-          dpr={[0.5, 1]}
-          gl={{
-            antialias: false,
-            alpha: true,
-            // preserveDrawingBuffer: true,
-          }}
-        >
-          {/* <color attach="background" args={["#555"]} /> */}
-          {process.env.NODE_ENV === "development" && <Stats />}
-          <Suspense fallback={<></>}>
-            <Scene resetTrigger={resetTrigger} onResetTrigger={handleReset} />
-          </Suspense>
-          <ambientLight intensity={1} />
-          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-          <EffectComposer multisampling={0}>
-            <DepthOfField
-              target={[0, 0, 1]}
-              focalLength={0.05}
-              bokehScale={5}
-              height={192}
-            />
-            <Bloom
-              luminanceThreshold={0.75}
-              luminanceSmoothing={0.1}
-            />
-            <N opacity={0.12} blendFunction={BlendFunction.MULTIPLY} />
-          </EffectComposer>
-          {/* <Environment preset="dawn" background blur={0.4} /> */}
-          <Environment background={false} resolution={64}>
-            <Striplight position={[10, 2, 0]} scale={[1, 3, 10]} />
-            <Striplight position={[-10, 2, 0]} scale={[1, 3, 10]} />
-            <mesh scale={70}>
-              <sphereGeometry args={[1, 32, 16]} />
-              <LayerMaterial side={THREE.BackSide}>
-                <Color color="blue" alpha={1} mode="normal" />
-                <Depth
-                  colorA="#00ffff"
-                  colorB="#ff8f00"
-                  alpha={0.5}
-                  mode="normal"
-                  near={0}
-                  far={300}
-                  origin={[100, 100, 100]}
-                />
-                <Noise mapping="local" type="curl" scale={0.5} mode="reflect" />
-              </LayerMaterial>
-            </mesh>
-          </Environment>
-          {/* <OrbitControls ref={orbitControlsRef} /> */}
-        </Canvas>
-        </div>
-        <div className="relative flex justify-center items-center min-h-[100svh] pointer-events-none">
-          {isInit && <motion.p
-            variants={container}
-            initial="hidden"
-            animate="visible"
-            className="relative overflow-hidden leading text-base text-white mt-60 md:mt-72 tracking-widest"
-          >
-            {Array.from("I'm a Senior Front-End Developer").map((letter, index) => (
-              <motion.span
-                key={index}
-                style={{ display: "inline-block" }}
-                variants={child}
-              >
-                {letter === " " ? "\u00A0" : letter}
-              </motion.span>
-            ))}
-          </motion.p>}
-        </div>
-        {/* <div className="min-h-[100svh]"></div> */}
-        <button
-          onClick={handleReset}
-          className="absolute bottom-14 md:bottom-20 right-6 z-10 px-4 py-2 text-[10px] md:text-xs tracking-widest text-white border border-white/40 rounded-full bg-white/5 backdrop-blur-sm hover:bg-white/15 transition"
-        >
-          Reset Position
-        </button>
-        <p className="absolute bottom-5 left-0 w-full text-[10px] md:text-xs text-neutral-400 text-center tracking-widest">Copyright © {new Date().getFullYear()} Darren Chan. All rights reserved.</p>
+      <div className="canvas">
+      <Canvas
+        // shadows
+        flat
+        linear
+        camera={{
+          fov: 55,
+          near: 0.1,
+          far: 200,
+        }}
+        dpr={[0.5, 1]}
+        gl={{
+          antialias: false,
+          alpha: true,
+          // preserveDrawingBuffer: true,
+        }}
+      >
+        {/* <color attach="background" args={["#555"]} /> */}
+        {process.env.NODE_ENV === "development" && <Stats />}
+        <Suspense fallback={<></>}>
+          <Scene resetTrigger={resetTrigger} onResetTrigger={handleReset} />
+        </Suspense>
+        <ambientLight intensity={1} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+        <EffectComposer multisampling={0}>
+          <DepthOfField
+            target={[0, 0, 1]}
+            focalLength={0.05}
+            bokehScale={5}
+            height={192}
+          />
+          <Bloom
+            luminanceThreshold={0.75}
+            luminanceSmoothing={0.1}
+          />
+          <N opacity={0.12} blendFunction={BlendFunction.MULTIPLY} />
+        </EffectComposer>
+        {/* <Environment preset="dawn" background blur={0.4} /> */}
+        <Environment background={false} resolution={64}>
+          <Striplight position={[10, 2, 0]} scale={[1, 3, 10]} />
+          <Striplight position={[-10, 2, 0]} scale={[1, 3, 10]} />
+          <mesh scale={70}>
+            <sphereGeometry args={[1, 32, 16]} />
+            <LayerMaterial side={THREE.BackSide}>
+              <Color color="blue" alpha={1} mode="normal" />
+              <Depth
+                colorA="#00ffff"
+                colorB="#ff8f00"
+                alpha={0.5}
+                mode="normal"
+                near={0}
+                far={300}
+                origin={[100, 100, 100]}
+              />
+              <Noise mapping="local" type="curl" scale={0.5} mode="reflect" />
+            </LayerMaterial>
+          </mesh>
+        </Environment>
+        {/* <OrbitControls ref={orbitControlsRef} /> */}
+      </Canvas>
       </div>
+      <div className="relative flex justify-center items-center min-h-[100svh] pointer-events-none">
+        {isInit && <motion.p
+          variants={container}
+          initial="hidden"
+          animate="visible"
+          className="relative overflow-hidden leading text-base text-white mt-60 md:mt-72 tracking-widest"
+        >
+          {Array.from("I'm a Senior Front-End Developer").map((letter, index) => (
+            <motion.span
+              key={index}
+              style={{ display: "inline-block" }}
+              variants={child}
+            >
+              {letter === " " ? "\u00A0" : letter}
+            </motion.span>
+          ))}
+        </motion.p>}
+      </div>
+      {/* <div className="min-h-[100svh]"></div> */}
+      <button
+        onClick={handleReset}
+        className="absolute bottom-14 md:bottom-20 right-6 z-10 px-4 py-2 text-[10px] md:text-xs tracking-widest text-white border border-white/40 rounded-full bg-white/5 backdrop-blur-sm hover:bg-white/15 transition"
+      >
+        Reset Position
+      </button>
+      <p className="absolute bottom-5 left-0 w-full text-[10px] md:text-xs text-neutral-400 text-center tracking-widest">Copyright © {new Date().getFullYear()} Darren Chan. All rights reserved.</p>
     </Layout>
   )
 }

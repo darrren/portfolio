@@ -142,19 +142,22 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, tot
     const vph = vpHeight * zFac
 
     const geom = geometry.current
-    if (geom) {
-      const pos = geom.attributes.position as THREE.BufferAttribute
+    const pos = geom?.attributes.position as THREE.BufferAttribute | undefined
+    if (geom && pos && pos.count > 0) {
       const scaleY = mesh.current.scale.y
       const uDistort = 1 - t
+      let valid = true
       for (let i = 0, l = pos.count; i < l; i++) {
         const viewY = pos.getY(i) * scaleY + mesh.current.position.y
         const distortion = Math.sin((viewY / vpHeight) * Math.PI + Math.PI / 2)
-        pos.setZ(i, distortion * 0.48 * uDistort)
+        const z = distortion * 0.48 * uDistort
+        if (!Number.isFinite(z)) {
+          valid = false
+          break
+        }
+        pos.setZ(i, z)
       }
-      pos.needsUpdate = true
-      geom.computeVertexNormals()
-      geom.computeBoundingSphere()
-      geom.computeBoundingBox()
+      if (valid) pos.needsUpdate = true
     }
 
     planeRects[index] = {

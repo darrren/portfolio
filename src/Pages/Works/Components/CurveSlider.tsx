@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, Suspense, useCallback } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
+import { Stats } from "@react-three/drei"
 import { EffectComposer, Bloom, DepthOfField, N8AO, Noise as N, TiltShift2, ToneMapping } from "@react-three/postprocessing"
 import { BlendFunction } from "postprocessing"
 import * as THREE from "three"
@@ -197,6 +198,7 @@ export default function CurveSlider() {
         // onCreated={({ gl }) => gl.setClearColor(0x000000, 1)}
         className={`works-canvas ${selectedItem ? "!pointer-events-none" : ""}`}
       >
+        {process.env.NODE_ENV === "development" && <Stats />}
         {domEls.length > 0 && (
           <Suspense fallback={null}>
             <Scene domEls={domEls} selectedIndex={selectedIndex} onSelect={handleSelect} totalHeight={totalHeight} />

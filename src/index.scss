@@ -49,3 +49,16 @@ body,
 .header {
   background:linear-gradient(to bottom, rgba(0,0,0,0.6) 50%, #00000000);
 }
+
+.wrapper {
+  @apply relative;
+  &:before {
+    @apply content-[''] absolute inset-0 pointer-events-none opacity-10;
+    background-image:radial-gradient(circle, #a600ff, #1e1e1e);
+  }
+}
+
+.canvas {
+  @apply fixed inset-0 w-full h-full;
+  user-select: none;
+}

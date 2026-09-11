@@ -2,9 +2,13 @@
   &.page {
     min-height: 100svh;
     width: 100%;
-    padding: 6rem 2rem 4rem;
+    padding: 4rem 1.25rem 4rem;
     display: flex;
     align-items: flex-start;
+
+    @media (min-width: 768px) {
+      padding: 6rem 2rem 4rem;
+    }
   }
 
   &-inner {
@@ -14,14 +18,17 @@
   }
 
   &-heading {
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
+
+    @media (min-width: 768px) {
+      margin-bottom: 4rem;
+    }
   }
 
   &-kicker {
-    font-size: 12px;
+    @apply text-xs text-neutral-400;
     letter-spacing: 0.4em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.45);
     margin-bottom: 1rem;
   }
 
@@ -34,7 +41,11 @@
 
   &-body {
     max-width: 620px;
-    margin-bottom: 5rem;
+    margin-bottom: 3rem;
+
+    @media (min-width: 768px) {
+      margin-bottom: 5rem;
+    }
   }
 
   &-lede {
@@ -46,18 +57,37 @@
   }
 
   &-copy {
+    @apply text-base text-neutral-300;
     font-size: 16px;
     line-height: 1.9;
-    color: rgba(255, 255, 255, 0.65);
+  }
+
+  &-badge {
+    margin-bottom: 5rem;
+
+    &-head {
+      max-width: 620px;
+      margin-bottom: 2rem;
+    }
+
+    &-kicker {
+      @apply text-xs text-neutral-300;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
   }
 
   &-meta {
     dl {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: 1fr;
       gap: 2rem;
       border-top: 1px solid rgba(255, 255, 255, 0.12);
       padding-top: 2rem;
+
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
 
       div {
         display: flex;
@@ -66,10 +96,9 @@
       }
 
       dt {
-        font-size: 12px;
+        @apply text-xs text-neutral-400;
         letter-spacing: 0.3em;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.4);
       }
 
       dd {
@@ -78,4 +107,9 @@
       }
     }
   }
+}
+
+.canvas {
+  @apply fixed inset-0 w-full h-full;
+  user-select: none;
 }

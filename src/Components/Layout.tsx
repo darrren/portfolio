@@ -32,7 +32,7 @@ const animation = {
       }
     },
     transition: {
-      duration: 0.7
+      duration: 1
     }
   }
 }
@@ -87,20 +87,22 @@ export default function Layout({ children }: Props) {
 
   return (
     <>
-      <motion.div
-        key={`page_${location.pathname}`}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        variants={animation.pageTransition.variants}
-        transition={animation.pageTransition.transition}
-        className="relative"
-        // style={{willChange:'transform, opacity'}}
-      >
-        <main className="relative overflow-hidden">
-          { children }
-        </main>
-      </motion.div>
+      <div className="wrapper relaive overflow-hidden">
+        <motion.div
+          key={`page_${location.pathname}`}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={animation.pageTransition.variants}
+          transition={animation.pageTransition.transition}
+          className="relative"
+          // style={{willChange:'transform, opacity'}}
+        >
+          <main className="relative overflow-hidden">
+            { children }
+          </main>
+        </motion.div>
+      </div>
     </>
   )
 }
