@@ -6,6 +6,7 @@ uniform sampler2D tMap;
 uniform float uVisibility;
 uniform float uDirection;
 uniform float uRGBShift;
+uniform float uScale;
 
 varying vec2 vUv;
 
@@ -19,6 +20,9 @@ void main() {
     vUv.x * ratio.x + (1.0 - ratio.x) * 0.5,
     vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
   );
+
+  // Scroll-driven scale: zoom into center of texture when uScale > 1
+  uv = (uv - 0.5) * (1.0 / uScale) + 0.5;
 
   // RGB split: red/blue shift horizontally, magnitude from scroll speed
   vec2 offset = vec2(0.0, uRGBShift * 0.062);

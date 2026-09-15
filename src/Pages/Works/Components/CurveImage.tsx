@@ -43,6 +43,7 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, tot
   const pointerTarget = useRef({ x: 0.5, y: 0.5 })
   const rgbShift = useRef(0)
   const prevScroll = useRef(scroll.current)
+  const scrollScale = useRef(1)
 
   const uniforms = useMemo(
     () => ({
@@ -55,6 +56,7 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, tot
       uHover: { value: 0 },
       uPointer: { value: [0.5, 0.5] },
       uRGBShift: { value: 0 },
+      uScale: { value: 1 },
     }),
     [texture, size.width, size.height]
   )
@@ -85,6 +87,11 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, tot
     const rgbTarget = Math.max(-0.5, Math.min(0.5, scrollSpeed * 0.02))
     rgbShift.current += (rgbTarget - rgbShift.current) * 0.08
     material.current.uniforms.uRGBShift.value = rgbShift.current
+
+    // Scroll-driven scale via shader: images subtly grow while scrolling, ease back to 1
+    const scrollScaleTarget = 1 + Math.min(Math.abs(scrollSpeed) * 0.008, 1.12)
+    scrollScale.current += (scrollScaleTarget - scrollScale.current) * 0.06
+    material.current.uniforms.uScale.value = scrollScale.current
 
     const screen = getScreen()
     const bounds = domEl.getBoundingClientRect()
@@ -135,19 +142,22 @@ function CurveImage({ image, domEl, size, scroll, index, selected, onSelect, tot
     const vph = vpHeight * zFac
 
     const geom = geometry.current
-    if (geom) {
-      const pos = geom.attributes.position as THREE.BufferAttribute
+    const pos = geom?.attributes.position as THREE.BufferAttribute | undefined
+    if (geom && pos && pos.count > 0) {
       const scaleY = mesh.current.scale.y
       const uDistort = 1 - t
+      let valid = true
       for (let i = 0, l = pos.count; i < l; i++) {
         const viewY = pos.getY(i) * scaleY + mesh.current.position.y
         const distortion = Math.sin((viewY / vpHeight) * Math.PI + Math.PI / 2)
-        pos.setZ(i, distortion * 0.48 * uDistort)
+        const z = distortion * 0.48 * uDistort
+        if (!Number.isFinite(z)) {
+          valid = false
+          break
+        }
+        pos.setZ(i, z)
       }
-      pos.needsUpdate = true
-      geom.computeVertexNormals()
-      geom.computeBoundingSphere()
-      geom.computeBoundingBox()
+      if (valid) pos.needsUpdate = true
     }
 
     planeRects[index] = {

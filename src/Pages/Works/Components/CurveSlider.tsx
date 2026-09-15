@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, Suspense, useCallback } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
+import { Stats } from "@react-three/drei"
 import { EffectComposer, Bloom, DepthOfField, N8AO, Noise as N, TiltShift2, ToneMapping } from "@react-three/postprocessing"
 import { BlendFunction } from "postprocessing"
 import * as THREE from "three"
@@ -8,7 +9,7 @@ import CurveImage, { planeRects } from "./CurveImage"
 import { WORK_ITEMS } from "../data"
 
 const scrollTarget = { current: 0 }
-const scroll = { current: window.innerHeight * 10 }
+const scroll = { current: window.innerHeight * 5 }
 const scrollVelocity = { current: 0 }
 const touchActive = { current: false }
 
@@ -188,7 +189,7 @@ export default function CurveSlider() {
       </div>
 
       <Canvas
-        shadows
+        // shadows
         flat
         linear
         dpr={[0.5, 1]}
@@ -197,12 +198,13 @@ export default function CurveSlider() {
         // onCreated={({ gl }) => gl.setClearColor(0x000000, 1)}
         className={`works-canvas ${selectedItem ? "!pointer-events-none" : ""}`}
       >
+        {process.env.NODE_ENV === "development" && <Stats />}
         {domEls.length > 0 && (
           <Suspense fallback={null}>
             <Scene domEls={domEls} selectedIndex={selectedIndex} onSelect={handleSelect} totalHeight={totalHeight} />
           </Suspense>
         )}
-        <EffectComposer>
+        <EffectComposer multisampling={0}>
           <N opacity={0.06} blendFunction={BlendFunction.MULTIPLY} />
         </EffectComposer>
       </Canvas>
