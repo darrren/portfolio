@@ -202,7 +202,7 @@ export default function Home() {
       {/* <div className="min-h-[100svh]"></div> */}
       <button
         onClick={handleReset}
-        className="absolute bottom-14 md:bottom-20 right-6 z-10 px-4 py-2 text-[10px] md:text-xs tracking-widest text-white border border-white/40 rounded-full bg-white/5 backdrop-blur-sm hover:bg-white/15 transition"
+        className="absolute bottom-14 md:bottom-6 right-6 z-10 px-4 py-2 text-[10px] md:text-xs tracking-widest text-white border border-white/40 rounded-full bg-white/5 backdrop-blur-sm hover:bg-white/15 transition"
       >
         Reset Position
       </button>

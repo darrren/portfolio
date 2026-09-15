@@ -59,6 +59,6 @@ body,
 }
 
 .canvas {
-  @apply fixed inset-0 w-full h-full;
+  @apply fixed inset-0 w-full h-[100svh];
   user-select: none;
 }

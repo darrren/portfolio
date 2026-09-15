@@ -11,11 +11,16 @@ import {
 } from "@react-three/rapier"
 import { MeshLineGeometry, MeshLineMaterial } from "meshline"
 import * as THREE from "three"
+import { useHookstate } from '@hookstate/core'
+import globalState from '@/Stores/state'
 
 // HOOKS
 import { useMediaQuery } from '@/Hooks/use-media-query'
 
 extend({ MeshLineGeometry, MeshLineMaterial })
+useGLTF.preload("../badge/tag.glb")
+useTexture.preload("../badge/texture.jpg")
+useTexture.preload("../badge/band.jpg")
 
 declare module "@react-three/fiber" {
   interface ThreeElements {
@@ -56,15 +61,18 @@ const release = (e: any) =>
 interface BandProps {
   dragged: false | THREE.Vector3
   onDrag: (v: false | THREE.Vector3) => void
+  flipKey: number
 }
 
-function Band({ dragged, onDrag }: BandProps) {
+function Band({ dragged, onDrag, flipKey }: BandProps) {
   const band = useRef<any>(null)
   const fixed = useRef<any>(null)
   const j1 = useRef<any>(null)
   const j2 = useRef<any>(null)
   const j3 = useRef<any>(null)
   const card = useRef<any>(null)
+  const tag = useRef<any>(null)
+  const flip = useRef({ active: false, from: 0, to: 0, t: 0 })
 
   const vec = new THREE.Vector3()
   const ang = new THREE.Vector3()
@@ -77,7 +85,10 @@ function Band({ dragged, onDrag }: BandProps) {
   const textureTag = useTexture("../badge/tag.jpg")
   const textureBand = useTexture("../badge/band.jpg")
   const { width, height } = useThree((state) => state.size)
+  const viewport = useThree((state) => state.viewport)
   const isMobile = useMediaQuery("(max-width: 767px)") as any
+  const scrollY = useHookstate(globalState).scrollY
+  const group = useRef<any>(null)
 
   const [curve] = useState(
     () =>
@@ -119,6 +130,22 @@ function Band({ dragged, onDrag }: BandProps) {
   }, [hovered, dragged])
 
   useFrame((state, delta) => {
+    if (flip.current.active) {
+      flip.current.t = Math.min(1, flip.current.t + delta / 0.75)
+      const t = flip.current.t
+      const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2
+      tag.current.rotation.y =
+        flip.current.from + (flip.current.to - flip.current.from) * eased
+      if (t >= 1) {
+        flip.current.active = false
+        tag.current.rotation.y =
+          ((tag.current.rotation.y % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2)
+      }
+    }
+
+    group.current.position.y = 4.5 + scrollY.get() * (viewport.height / height)
+    band.current.position.y = scrollY.get() * (viewport.height / height)
+
     if (dragged) {
       vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera)
       dir.copy(vec).sub(state.camera.position).normalize()
@@ -162,12 +189,19 @@ function Band({ dragged, onDrag }: BandProps) {
   textureBand.wrapS = textureBand.wrapT = THREE.RepeatWrapping
 
   useEffect(() => {
-    console.log('band mounted')
-  }, [])
+    if (flipKey > 0 && tag.current) {
+      flip.current = {
+        active: true,
+        from: tag.current.rotation.y,
+        to: tag.current.rotation.y + Math.PI,
+        t: 0,
+      }
+    }
+  }, [flipKey])
 
   return (
     <>
-      <group position={isMobile ? [0, 4, 0] : [2.5, 4, 0]}>
+      <group ref={group} position={isMobile ? [0, 4.5, 0] : [2.5, 4.5, 0]}>
         <RigidBody ref={fixed} {...SEGMENT_PROPS} type="fixed" />
         <RigidBody
           position={[0.5, 0, 0]}
@@ -198,6 +232,7 @@ function Band({ dragged, onDrag }: BandProps) {
         >
           <CuboidCollider args={[0.8, 1.125, 0.01]} />
           <group
+            ref={tag}
             scale={2.25}
             position={[0, -1.2, -0.05]}
             onPointerOver={() => hover(true)}
@@ -245,7 +280,7 @@ function Band({ dragged, onDrag }: BandProps) {
   )
 }
 
-const Badge = memo(function Badge() {
+const Badge = memo(function Badge({ flipKey = 0 }: { flipKey?: number }) {
   const [dragged, drag] = useState<false | THREE.Vector3>(false)
 
   return (
@@ -259,16 +294,16 @@ const Badge = memo(function Badge() {
         alpha: true,
         // preserveDrawingBuffer: true,
       }}>
-      {process.env.NODE_ENV === "development" && <Stats />}
+      {/* {process.env.NODE_ENV === "development" && <Stats />} */}
       <ambientLight intensity={Math.PI} />
       <Suspense fallback={<></>}>
         <Physics
           gravity={[0, -40, 0]}
           interpolate={!dragged}
-          timeStep={1 / 30}
+          timeStep={1 / 60}
           numSolverIterations={8}
         >
-          <Band dragged={dragged} onDrag={drag} />
+          <Band dragged={dragged} onDrag={drag} flipKey={flipKey} />
         </Physics>
       </Suspense>
       <Environment background={false} resolution={64} blur={0.75}>
@@ -305,9 +340,5 @@ const Badge = memo(function Badge() {
     </Canvas>
   )
 })
-
-useGLTF.preload("../badge/tag.glb")
-useTexture.preload("../badge/texture.jpg")
-useTexture.preload("../badge/band.jpg")
 
 export default Badge

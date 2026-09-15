@@ -32,7 +32,7 @@ const animation = {
       }
     },
     transition: {
-      duration: 1
+      duration: 0.7
     }
   }
 }
